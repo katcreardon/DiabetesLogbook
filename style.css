@@ -1,0 +1,83 @@
+.log-table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    display: table;
+    table-layout: fixed;
+}
+
+.log-table thead tr:first-child {
+    background-color: #f44336;
+    color: #ffffff;
+}
+
+.log-table thead tr:first-child th:first-child {
+    background-color: #ffffff;
+}
+
+.log-table thead tr:nth-child(2) {
+    background-color: #ffdddd;
+}
+
+.log-table th, .log-table td {
+    text-align: center;
+    vertical-align: center;
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+.log-table th:first-child {
+    border: none;
+    width: 10%;
+}
+
+.log-table tbody tr:last-child td {
+    border: 0;
+    padding: 5px;
+}
+
+.log-table th:not(:first-child) {
+    width: 15%;
+}
+
+.log-table tbody tr:first-child td:nth-child(6), .log-table tbody tr:first-child td:nth-child(9),
+.log-table tbody tr:first-child td:nth-child(10), .log-table tbody tr:nth-child(3) td:nth-child(7) {
+    background-color: #ffdddd;
+}
+
+.col-25 {
+    float: left;
+    width: 15%;
+    margin-top: 6px;
+}
+
+.col-75 {
+    float: left;
+    width: 75%;
+    margin-top: 6px;
+    display: inline-block;
+}
+
+input[type=time] {
+    width: 100%;
+}
+
+/*input[type=text] {*/
+/*    width: 25%;*/
+/*}*/
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+table {
+    display: table;
+    table-layout: fixed;
+}
+
+table th:first-child {
+    width: 20%;
+}
