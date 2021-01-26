@@ -1,7 +1,7 @@
 # DiabetesLogbook
 Repository for my Diabetes Logbook project.
 
-This project was created to help track my calories, carbohydrates, and blood sugar levels. It uses HTML to display the logbook in a neat and readable way and PHP to access the MySQL database.
+This project was created to help track my calories, carbohydrates, and blood sugar levels. It uses HTML/CSS to display the logbook in a neat and readable way and PHP to access the MySQL database.
 
 The database contains tables to store the logbook entries, as well as tables for common meals and snacks I eat so the calories and carbs fields can be auto-populated.
 
