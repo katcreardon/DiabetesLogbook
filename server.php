@@ -1,13 +1,12 @@
 <?php
     include "datalogin.php";
     session_start();
-    date_default_timezone_set('America/New_York');
-    $date = date('Y-m-d');
+    $date = $_POST['date'];
+    $entry_type = $_POST['entry_type'];
 
     // Insert values for breakfast, lunch, and dinner
     if (isset($_POST['add_entry'])) {
         // Receive all input values from the form
-        $entry_type = $_POST['entry_type'];
         if (empty($_POST['pre_time'])) {
             $pre_time = "NULL";
         } else {
@@ -48,7 +47,6 @@
 
     // Edit values for breakfast, lunch, and dinner
     if (isset($_POST['edit_entry'])) {
-        $entry_type = $_POST['entry_type'];
         if (empty($_POST['pre_time'])) {
             $pre_time = "NULL";
         } else {
@@ -89,7 +87,6 @@
 
     // Insert values for snacks
     if (isset($_POST['add_snack'])) {
-        $entry_type = $_POST['entry_type'];
         $calories = mysqli_real_escape_string($db, $_POST['calories']);
         $carbs = mysqli_real_escape_string($db, $_POST['carbs']);
 
@@ -101,7 +98,6 @@
 
     // Edit values for snack
     if (isset($_POST['edit_snack'])) {
-        $entry_type = $_POST['entry_type'];
         if (empty($_POST['calories'])) {
             $calories = "NULL";
         } else {
@@ -121,7 +117,6 @@
 
     // Insert blood sugar for bedtime
     if (isset($_POST['add_bedtime'])) {
-        $entry_type = $_POST['entry_type'];
         $blood_sugar = $_POST['blood_sugar'];
 
         $query = "INSERT INTO entries (entry_number, date, entry_type, pre_time, post_time, pre_blood_sugar, 
@@ -132,7 +127,6 @@
 
     // Edit blood sugar for bedtime
     if (isset($_POST['edit_bedtime'])) {
-        $entry_type = $_POST['entry_type'];
         $blood_sugar = "'" . mysqli_real_escape_string($db, $_POST['blood_sugar']) . "'";
 
         $query = "UPDATE entries SET pre_blood_sugar=".$blood_sugar." WHERE date='$date' AND entry_type='$entry_type'";
@@ -158,7 +152,20 @@
     // Autocomplete search
     if (isset($_GET['term'])) {
         if (strcmp($_SESSION['search_type'], 'meal') == 0) {
-            $query = "SELECT * FROM meals WHERE name LIKE '{$_GET['term']}%' ORDER by name ASC";
+            $query = "SELECT * FROM meals WHERE name LIKE '%{$_GET['term']}%' ORDER by name ASC";
+            $result = mysqli_query($db, $query);
+
+            if (mysqli_num_rows($result) > 0) {
+                while ($user = mysqli_fetch_array($result)) {
+                    $res[] = $user['name'];
+                }
+            } else {
+                $res = array();
+            }
+            //return json res
+            echo json_encode($res);
+        } else if (strcmp($_SESSION['search_type'], 'snack') == 0) {
+            $query = "SELECT * from snacks WHERE name LIKE '%{$_GET['term']}%' ORDER by name ASC";
             $result = mysqli_query($db, $query);
 
             if (mysqli_num_rows($result) > 0) {

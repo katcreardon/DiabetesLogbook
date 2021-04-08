@@ -1,14 +1,13 @@
 <?php
-include "server.php";
-
-$value = $_GET['column'];
-$check_query = "SELECT * FROM entries WHERE date='$date' AND entry_type='$value'";
-$result = mysqli_query($db, $check_query);
-
-while ($row = mysqli_fetch_assoc($result)) {;
-    $blood_sugar = $row['pre_blood_sugar'];
-}
-include "header.php";
+    include "server.php";
+    $value = $_GET['column'];
+    $date = $_GET['date'];
+    $check_query = "SELECT * FROM entries WHERE date='$date' AND entry_type='$value'";
+    $result = mysqli_query($db, $check_query);
+    while ($row = mysqli_fetch_assoc($result)) {;
+        $blood_sugar = $row['pre_blood_sugar'];
+    }
+    include "header.php";
 ?>
 
 <html>
@@ -17,7 +16,7 @@ include "header.php";
     <div class="w3-content">
         <div class="w3-twothird">
             <h1><?php echo "Edit {$value}"; ?></h1>
-            <form method="post" action="index.php">
+            <form method="post" action="<?php echo $_SERVER['HTTP_REFERER']; ?>">
                 <table>
                     <tbody>
                     <tr>
@@ -30,7 +29,8 @@ include "header.php";
                         <td></td>
                         <td>
                             <input type="hidden" name="entry_type" value="<?php echo $value; ?>">
-                            <button type="submit" class="btn" name="add_bedtime">Submit</button>
+                            <input type="hidden" name="date" value="<?php echo $date; ?>">
+                            <button type="submit" class="btn" name="edit_bedtime">Submit</button>
                         </td>
                     </tr>
                     </tbody>

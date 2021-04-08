@@ -1,16 +1,18 @@
 <?php
     include "server.php";
+    $yesterday = date("Y-m-d", mktime(0, 0, 0, date("m"),
+        date("d") - 1, date("Y")));
 
     if (isset($_POST['change_date'])) {
         $date = $_POST['prev_date'];
     } else {
-        $date = date("Y-m-d", mktime(0, 0, 0,
-            date("m"), date("d") - 1, date("Y")));
+        $date = $yesterday;
     }
 
     $breakfast_check_query = "SELECT * FROM entries WHERE date='$date' AND entry_type='Breakfast'";
     $bf_result = mysqli_query($db, $breakfast_check_query);
     if (mysqli_num_rows($bf_result) < 1) {
+        $bf_empty = true;
         $bf_calories = "0";
         $bf_carbs = "0";
     }
@@ -42,6 +44,7 @@
     $lunch_check_query = "SELECT * FROM entries WHERE date='$date' AND entry_type='Lunch'";
     $l_result = mysqli_query($db, $lunch_check_query);
     if (mysqli_num_rows($l_result) < 1) {
+        $l_empty = true;
         $l_calories = "0";
         $l_carbs = "0";
     }
@@ -73,6 +76,7 @@
     $s1_check_query = "SELECT * FROM entries WHERE date='$date' AND entry_type='First Snack'";
     $s1_result = mysqli_query($db, $s1_check_query);
     if (mysqli_num_rows($s1_result) < 1) {
+        $s1_empty = true;
         $s1_calories = "0";
         $s1_carbs = "0";
     }
@@ -92,6 +96,7 @@
     $d_check_query = "SELECT * FROM entries WHERE date='$date' AND entry_type='Dinner'";
     $d_result = mysqli_query($db, $d_check_query);
     if (mysqli_num_rows($d_result) < 1) {
+        $d_empty = true;
         $d_calories = "0";
         $d_carbs = "0";
     }
@@ -123,6 +128,7 @@
     $s2_check_query = "SELECT * FROM entries WHERE date='$date' AND entry_type='Second Snack'";
     $s2_result = mysqli_query($db, $s2_check_query);
     if (mysqli_num_rows($s2_result) < 1) {
+        $s2_empty = true;
         $s2_calories = "0";
         $s2_carbs = "0";
     }
@@ -141,6 +147,9 @@
 
     $bed_check_query = "SELECT * FROM entries WHERE date='$date' AND entry_type='Bedtime'";
     $bed_result = mysqli_query($db, $bed_check_query);
+    if (mysqli_num_rows($bed_result) < 1) {
+        $bed_empty = true;
+    }
     while ($field = mysqli_fetch_assoc($bed_result)) {
         if (is_null($field['pre_time'])) {
             $bed_pre_time = "";
@@ -164,7 +173,7 @@
                 <form method="post">
                     <label for="date">Select a date:</label>
                     <input type="date" id="date" name="prev_date" value="<?php echo $date; ?>"
-                           max="<?php echo $date; ?>">
+                           max="<?php echo $yesterday; ?>">
                     <input type="submit" name="change_date"/>
                 </form>
             </div>
@@ -277,18 +286,122 @@
                 </tr>
                 <tr>
                     <th></th>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td colspan="1"></td>
-                    <td colspan="1"></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <?php
+                    if ($bf_empty) {
+                        echo
+                            "<td colspan='2'>
+                            <form method='get' action='add_entry.php'>
+                                 <input type='hidden' name='column' value='Breakfast'>
+                                 <input type='hidden' name='date' value='" . $date . "'>
+                                 <input type='submit' value='Add'>
+                            </form>
+                       </td>";
+                    } else {
+                        echo
+                            "<td colspan='2'>
+                            <form method='get' action='edit_entry.php'>
+                                <input type='hidden' name='column' value='Breakfast'>
+                                <input type='hidden' name='date' value='" . $date . "'>
+                                <input type='submit' value='Edit'>
+                            </form>
+                         </td>";
+                    }
+                    if ($l_empty) {
+                        echo
+                            "<td colspan='2'>
+                            <form method='get' action='add_entry.php'>
+                                <input type='hidden' name='column' value='Lunch'>
+                                <input type='hidden' name='date' value='" . $date . "'>
+                                <input type='submit' value='Add'>
+                            </form>
+                         </td>";
+                    } else {
+                        echo
+                            "<td colspan='2'>
+                             <form method='get' action='edit_entry.php'>
+                                 <input type='hidden' name='column' value='Lunch'>
+                                 <input type='hidden' name='date' value='" . $date . "'>
+                                 <input type='submit' value='Edit'>
+                             </form>
+                         </td>";
+                    }
+                    if ($s1_empty) {
+                        echo
+                            "<td colspan='2'>
+                             <form method='get' action='add_snack.php'>
+                                 <input type='hidden' name='column' value='First Snack'>
+                                 <input type='hidden' name='date' value='" . $date . "'>
+                                 <input type='submit' value='Add'>
+                             </form>
+                         </td>";
+                    } else {
+                        echo
+                            "<td colspan='2'>
+                             <form method='get' action='edit_snack.php'>
+                                 <input type='hidden' name='column' value='First Snack'>
+                                 <input type='hidden' name='date' value='" . $date . "'>
+                                 <input type='submit' value='Edit'>
+                             </form>
+                         </td>";
+                    }
+                    if ($d_empty) {
+                        echo
+                            "<td colspan='2'>
+                            <form method='get' action='add_entry.php'>
+                                <input type='hidden' name='column' value='Dinner'>
+                                <input type='hidden' name='date' value='" . $date . "'>
+                                <input type='submit' value='Add'>
+                            </form>
+                        </td>";
+                    } else {
+                        echo
+                            "<td colspan='2'>
+                             <form method='get' action='edit_entry.php'>
+                                 <input type='hidden' name='column' value='Dinner'>
+                                 <input type='hidden' name='date' value='" . $date . "'>
+                                 <input type='submit' value='Edit'>
+                             </form>
+                         </td>";
+                    }
+                    if ($s2_empty) {
+                        echo
+                            "<td colspan='2'>
+                            <form method='get' action='add_snack.php'>
+                                <input type='hidden' name='column' value='Second Snack'>
+                                <input type='hidden' name='date' value='" . $date . "'>
+                                <input type='submit' value='Add'>
+                            </form>
+                        </td>";
+                    } else {
+                        echo
+                            "<td colspan='2'>
+                            <form method='get' action='edit_snack.php'>
+                                <input type='hidden' name='column' value='Second Snack'>
+                                <input type='hidden' name='date' value='" . $date . "'>
+                                <input type='submit' value='Edit'>
+                            </form>
+                        </td>";
+                    }
+                    if ($bed_empty) {
+                        echo
+                            "<td colspan='2'>
+                             <form method='get' action='add_bedtime.php'>
+                                 <input type='hidden' name='column' value='Bedtime'>
+                                 <input type='hidden' name='date' value='" . $date . "'>
+                                 <input type='submit' value='Add'>
+                             </form>
+                         </td>";
+                    } else {
+                        echo
+                            "<td colspan='2'>
+                             <form method='get' action='edit_bedtime.php'>
+                                 <input type='hidden' name='column' value='Bedtime'>
+                                 <input type='hidden' name='date' value='" . $date . "'>
+                                 <input type='submit' value='Edit'>
+                             </form>
+                         </td>";
+                    }
+                    ?>
                 </tr>
                 </tbody>
             </table>

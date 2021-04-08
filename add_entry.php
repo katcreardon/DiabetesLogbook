@@ -3,6 +3,7 @@
     session_start();
     $_SESSION['search_type'] = 'meal';
     $value = $_GET['column'];
+    $date = $_GET['date'];
 
     // Set calories and carbs fields based on search
     if (isset($_POST['submit_search'])) {
@@ -17,7 +18,6 @@
             }
         }
     }
-
     include "header.php";
 ?>
 <!-- jQuery library -->
@@ -41,7 +41,7 @@
     <div class="w3-content">
         <div class="w3-twothird">
             <h1><?php echo $value; ?></h1>
-            <form method="post" action="index.php">
+            <form method="post" action="<?php echo $_SERVER['HTTP_REFERER']; ?>">
                 <table>
                     <thead>
                         <tr>
@@ -85,6 +85,7 @@
                             <td></td>
                             <td>
                                 <input type="hidden" name="entry_type" value="<?php echo $value; ?>">
+                                <input type="hidden" name="date" value="<?php echo $date; ?>">
                                 <button type="submit" class="btn" name="add_entry">Submit</button>
                             </td>
                         </tr>

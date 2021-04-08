@@ -1,6 +1,7 @@
 <?php
 include "server.php";
 $value = $_GET['column'];
+$date = $_GET['date'];
 include "header.php";
 ?>
 
@@ -10,7 +11,7 @@ include "header.php";
     <div class="w3-content">
         <div class="w3-twothird">
             <h1><?php echo $value; ?></h1>
-            <form method="post" action="index.php">
+            <form method="post" action="<?php echo $_SERVER['HTTP_REFERER']; ?>">
                 <table>
                     <tbody>
                         <tr>
@@ -23,6 +24,7 @@ include "header.php";
                             <td></td>
                             <td>
                                 <input type="hidden" name="entry_type" value="<?php echo $value; ?>">
+                                <input type="hidden" name="date" value="<?php echo $date; ?>">
                                 <button type="submit" class="btn" name="add_bedtime">Submit</button>
                             </td>
                         </tr>
